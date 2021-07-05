@@ -281,7 +281,7 @@ def make_epub(output: str, book: Book):
             # Note: There's a chance of false positives if the author managed to weave in the tags in the main text
             tags_content = ""
 
-        emoji_content = f'<p style="font-family: sans-serif; font-size: 8pt; text-align: center; margin-top: 1em;"><img width="20px" src="{emoji.file_name}" alt="entry.emoji_name"/><br>:{entry.emoji_name}:</p>'
+        emoji_content = f'<p style="font-family: sans-serif; font-size: 8pt; text-align: center; margin-top: 1em;"><img width="20px" src="{emoji.file_name}" alt="{entry.emoji_name}"/><br>:{entry.emoji_name}:</p>'
         open_original = f'<p style="font-family: sans-serif; font-size: 10pt; margin-bottom: 1em;"><a href="{entry.url}">Open original</a></p>'
 
         chapter.content = emoji_content + tags_content + open_original + title_content + content
