@@ -254,6 +254,7 @@ def make_epub(output: str, book: Book):
     epub_book.add_item(cover_page)
 
     # create chapters
+    chapter_template = jinja_env.get_template("chapter.jinja")
     chapters = []
     for i, entry in enumerate(book.entries):
         chapter_number = i + 1
@@ -266,25 +267,20 @@ def make_epub(output: str, book: Book):
 
         # Commented out as it may be better to preserve the original formatting at the expense of improved readability.
         #content = entry.readable_html_target.read_text()
-        content = entry.raw_html_target.read_text()
-        content_lower = content.lower()
-        if "cannotExportFile" in content:
-            content = f'<p style="font-family: sans-serif"><a href="{entry.url}">Read this entry here.</a></p>'
-
-        title_content = f'<h1>{entry.title}</h1>'
-        if entry.title.lower() in content.lower():
-            title_content = ""
-
-        tags_content = f'<p style="font-family: sans-serif; font-size: 10pt;">Tags: {", ".join(entry.tags)}</p>'
-        # Omit tags if the author has listed them in the submission.
-        if all((tag.lower() in content_lower for tag in entry.tags)):
+        raw_html = entry.raw_html_target.read_text()
+        raw_html_lower = raw_html.lower()
+        chapter.content = chapter_template.render(
+            raw_html=raw_html,
+            title=entry.title,
+            url=entry.url,
+            tags=entry.tags,
+            emoji_file_name=emoji.file_name,
+            emoji_name=entry.emoji_name,
+            raw_html_includes_title=entry.title.lower() in raw_html_lower,
             # Note: There's a chance of false positives if the author managed to weave in the tags in the main text
-            tags_content = ""
-
-        emoji_content = f'<p style="font-family: sans-serif; font-size: 8pt; text-align: center; margin-top: 1em;"><img width="20px" src="{emoji.file_name}" alt="{entry.emoji_name}"/><br>:{entry.emoji_name}:</p>'
-        open_original = f'<p style="font-family: sans-serif; font-size: 10pt; margin-bottom: 1em;"><a href="{entry.url}">Open original</a></p>'
-
-        chapter.content = emoji_content + tags_content + open_original + title_content + content
+            raw_html_includes_tags=all((tag.lower() in raw_html_lower for tag in entry.tags)),
+            raw_html_failed_to_export="cannotExportFile" in raw_html,
+        )
         epub_book.add_item(chapter)
         chapters.append(chapter)
 
@@ -313,7 +309,7 @@ def task_epub():
     return {
         "file_dep": ([entry.raw_html_target for entry in book.entries]
                      + [entry.emoji_target for entry in book.entries]
-                     + [book.cover_image_target, "stylesheets/style.css"]),
+                     + [book.cover_image_target, "stylesheets/style.css", "templates/chapter.jinja"]),
         "targets": [book.epub_target],
         "actions": [write_epub]
     }

@@ -1,0 +1,20 @@
+<p style="font-family: sans-serif; font-size: 8pt; text-align: center; margin-top: 1em;">
+  <img width="20px" src="{{ emoji_file_name }}" alt="{{ emoji_name }}"/><br>
+  :{{ emoji_name }}:
+</p>
+{% if not raw_html_includes_tags %}
+  <p style="font-family: sans-serif; font-size: 10pt;">Tags: {{ tags|join(", ") }}</p>
+{% endif %}
+{% if not raw_html_failed_to_export %}
+  <p style="font-family: sans-serif; font-size: 10pt; margin-bottom: 1em;"><a href="{{ url }}">Open original</a></p>
+{% endif %}
+{% if not raw_html_includes_title %}
+  <h1>{{ title }}</h1>
+{% endif %}
+{% if raw_html_failed_to_export %}
+  <p style="font-family: sans-serif"><a href="{{ url }}">Read this entry here.</a></p>
+{% endif %}
+
+{% if not raw_html_failed_to_export %}
+  {{ raw_html|safe }}
+{% endif %}
