@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      :root {
+          --width: 100vw;
+          --height: 100vh;
+          --ink-gray: #383a3d;
+          --vermillion: #e64d10;
+          --dark-vermillion: #8f300a66;
+          --paper-white: #e2e4da;
+          --background-texture: url("{{ background_texture }}");
+      }
+      html {
+          width: var(--width);
+          height: var(--height);
+          background-color: var(--vermillion);
+      }
+      body {
+          display: grid;
+          grid-template-columns: auto 44px;
+          grid-template-rows: [start] 1fr 3fr 3fr 3fr 1fr [end];
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+          margin: 0;
+          background-color: var(--vermillion);
+          background-image: var(--background-texture);
+          {% if text_direction == "ltr" %}
+          transform: scaleX(-1);
+          {% endif %}
+      }
+      article {
+          grid-row-start: start;
+          grid-row-end: end;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: stretch;
+          align-content: center;
+          text-align: center;
+          padding: calc(var(--height) * 0.1) calc(var(--height) * 0.02);
+          background: transparent;
+          font-family: serif;
+      }
+      .title {
+          font-size: calc(var(--width) * 0.08);
+          font-weight: bold;
+          overflow: hidden;
+          margin: 0;
+          padding: calc(var(--width) * 0.010);
+          border-radius: 1px;
+          box-shadow: 0 0 2px 0 #444;
+          color: var(--ink-gray);
+          background-color: var(--paper-white);
+          background-image: var(--background-texture);
+          {% if text_direction == "ltr" %}
+          transform: scaleX(-1);
+          {% endif %}
+      }
+      .outer-border {
+          border: calc(var(--width) * 0.008) var(--ink-gray) solid;
+          padding: calc(var(--width) * 0.003);
+          border-radius: 1px;
+      }
+      .inner-border {
+          border: calc(var(--width) * 0.003) var(--ink-gray) solid;
+          padding: calc(var(--width) * 0.008);
+      }
+      .binding {
+          border-left: 2px var(--dark-vermillion) dashed;
+      }
+      .binding:not(:last-child) {
+          border-bottom: 2px var(--dark-vermillion) dashed;
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <article>
+      <h1 class="title">
+        <div class="outer-border">
+          <div class="inner-border">
+            {{ title }}
+          </div>
+        </div>
+      </h1>
+    </article>
+    <div class="binding"></div>
+    <div class="binding"></div>
+    <div class="binding"></div>
+    <div class="binding"></div>
+    <div class="binding"></div>
+  </body>
+</html>

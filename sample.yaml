@@ -1,0 +1,7 @@
+title: "Book sample"
+entries:
+- emoji_url: https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Chromium_11_Logo.svg/256px-Chromium_11_Logo.svg.png
+  emoji_name: blink
+  title: How Blink works
+  tags: Browser, Rendering, Chromium
+  url: https://docs.google.com/document/d/1aitSOucL0VHZa9Z2vbRJSyAIsAz24kX8LFByQ5xQnUg/edit
